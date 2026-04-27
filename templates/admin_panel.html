@@ -15,6 +15,7 @@
         <a class="admin-tab-btn" href="#competition-section">Competition Management</a>
         <a class="admin-tab-btn" href="#password-section">Admin Password</a>
         <a class="admin-tab-btn" href="#archives-section">Archives</a>
+        <a class="admin-tab-btn" href="#system-section">Shutdown</a>
     </aside>
 
     <div class="admin-main">
@@ -196,7 +197,24 @@
             <div id="modal-message" class="alert" style="display:none;"></div>
             <div id="modal-access-code" class="access-code-pill" style="display:none;"></div>
         </div>
+
     </div>
+
+    <div class="admin-section" id="system-section">
+      <h2>System Control</h2>
+
+      <p class="warning-note">
+        <strong>Warning:</strong>
+        This will immediately shut down the Raspberry Pi.
+      </p>
+
+      <button id="shutdownPiBtn" class="btn btn-danger">
+        Shut Down Raspberry Pi
+      </button>
+
+      <div id="shutdown-message" class="alert" style="display:none;"></div>
+    </div>
+    
     </div>
 </div>
 {% endblock %}
