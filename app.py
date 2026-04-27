@@ -8,6 +8,7 @@ import io
 from datetime import datetime
 from functools import wraps
 import qrcode
+import subprocess
 
 app = Flask(__name__)
 DATABASE = 'voting.db'
@@ -869,6 +870,18 @@ def update_archive_entry():
     conn.close()
 
     return jsonify({'success': True, 'message': 'Archive entry updated'})
+
+@app.route('/admin/shutdown_pi', methods=['POST'])
+@admin_required
+def shutdown_pi():
+    try:
+        subprocess.Popen(['sudo', '/sbin/shutdown', '-h', 'now'])
+        return jsonify({'success': True})
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'message': str(e)
+        }), 500
 
 if __name__ == '__main__':
     init_db()

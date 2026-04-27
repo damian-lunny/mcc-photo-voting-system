@@ -643,7 +643,51 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+
+    const shutdownBtn = document.getElementById('shutdownPiBtn');
+    const shutdownMsg = document.getElementById('shutdown-message');
+
+    if (shutdownBtn) {
+        shutdownBtn.addEventListener('click', async () => {
+            if (!confirm(
+                'Are you sure you want to shut down the Raspberry Pi?\n\n' +
+                'This will immediately power off the system.'
+            )) {
+                return;
+            }
+
+            shutdownBtn.disabled = true;
+            shutdownBtn.textContent = 'Shutting down…';
+
+            try {
+                const response = await fetch('/admin/shutdown_pi', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    shutdownMsg.textContent = 'System is shutting down…';
+                    shutdownMsg.className = 'alert alert-success';
+                } else {
+                    shutdownMsg.textContent = result.message || 'Shutdown failed.';
+                    shutdownMsg.className = 'alert alert-error';
+                    shutdownBtn.disabled = false;
+                    shutdownBtn.textContent = 'Shut Down Raspberry Pi';
+                }
+
+                shutdownMsg.style.display = 'block';
+            } catch (err) {
+                shutdownMsg.textContent =
+                    'Network error. The system may already be shutting down.';
+                shutdownMsg.className = 'alert alert-error';
+                shutdownMsg.style.display = 'block';
+            }
+        });
+    }
 });
+
 </script>
 {% endblock %}
 
